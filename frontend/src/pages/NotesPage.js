@@ -3,6 +3,7 @@ import SearchBar from "../components/SearchBar";
 import "./NotesPage.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Button from 'react-bootstrap/Button';
 
 const headings = ["Name", "Code", "Course", "Type", "Link","Favourite"];
 
@@ -13,6 +14,7 @@ export default function NotesPage() {
   const [myDocs, setMyDocs] = useState([]);
   const [myDocIds, setMyDocIds] = useState([]);
   const [myId, setMyId] = useState();
+  const [isMyNote,setIsMyNote]=useState(false);
 
   const addToMyDocIds = (id) => {
     setMyDocIds(current => [...current, id]);
@@ -73,7 +75,7 @@ export default function NotesPage() {
   }, [])
   useEffect(()=>{ 
     fetchMyDocs();
-  }, [myId])
+  }, [myId,myDocs])
 
   useEffect(() => {
     // fetchData();
@@ -99,11 +101,22 @@ export default function NotesPage() {
 
   return (
     <div className="container-xxl">
+      <div class="float-container">
       <header>
         <h1> Notes : </h1>
         <SearchBar setSearchText={setSearchText} />
       </header>
-      <Tables headings={headings} data={visibleData} myDocIds={myDocIds} addToMyDocIds={addToMyDocIds} removeFromMyDocIds={removeFromMyDocIds} myId={myId} />
+        <div class="float-child1">
+          <div><Button variant={isMyNote? 'primary' : 'secondary'} class="btn" onClick={()=>setIsMyNote(true)}>All Notes</Button></div>
+          <div><Button variant={!isMyNote? 'primary' : 'secondary'} class="btn" onClick={()=>setIsMyNote(false)}>My Notes</Button></div>
+        </div>
+        <div class="float-child2">
+          {!isMyNote?
+          <Tables headings={headings} data={myDocs} myDocIds={myDocIds} addToMyDocIds={addToMyDocIds} removeFromMyDocIds={removeFromMyDocIds} myId={myId} />
+            :
+          <Tables headings={headings} data={visibleData} myDocIds={myDocIds} addToMyDocIds={addToMyDocIds} removeFromMyDocIds={removeFromMyDocIds} myId={myId} />
+           } </div>
+      </div>
     </div>
   );
 }
