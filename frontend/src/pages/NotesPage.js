@@ -18,13 +18,16 @@ export default function NotesPage() {
     setMyDocIds(current => [...current, id]);
 
   }
+  const removeFromMyDocIds=(id)=>{
+    setMyDocIds(current => current.filter( current => current != id))
+  }
 
   const filterData = () => {
     if (searchText == "") {
       setVisibleData(data);
     } else {
       setVisibleData(
-        data.filter(
+        data?.filter(
           (each) =>
             each.name.toUpperCase().includes(searchText) ||
             each.code.toUpperCase().includes(searchText) ||
@@ -100,7 +103,8 @@ export default function NotesPage() {
         <h1> Notes : </h1>
         <SearchBar setSearchText={setSearchText} />
       </header>
-      <Tables headings={headings} data={visibleData} myDocIds={myDocIds} addToMyDocIds={addToMyDocIds} myId={myId} />
+      <Tables headings={headings} data={visibleData} myDocIds={myDocIds} addToMyDocIds={addToMyDocIds} removeFromMyDocIds={removeFromMyDocIds} myId={myId} />
     </div>
   );
 }
+ 
